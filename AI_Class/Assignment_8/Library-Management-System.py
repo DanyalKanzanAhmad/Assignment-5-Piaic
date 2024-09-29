@@ -144,7 +144,7 @@ def main():
                         f"ID: {book.book_id}, Title: {book.title}, Author: {book.author}, Genre: {book.genre}, Status: {book.status}"
                     )
             else:
-                print("No matching books found.")
+                print("No books are found.")
         elif choice == 6:
             view_all_books(books)
         elif choice == 7:
