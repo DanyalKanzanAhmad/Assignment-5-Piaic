@@ -39,8 +39,10 @@ def borrow_book(books, users, user_id, book_id):
         user.borrowed_books.append(book)
         book.status = "Checked Out"
         print(f"You have successfully borrowed '{book.title}'.")
+        return True
     else:
         print("Book is not available or user not found.")
+        return False
 
 
 def return_book(books, users, user_id, book_id):
@@ -58,8 +60,10 @@ def return_book(books, users, user_id, book_id):
         user.borrowed_books.remove(book)
         book.status = "Available"
         print(f"You have successfully returned '{book.title}'.")
+        return True
     else:
         print("Book is not borrowed or user not found.")
+        return False
 
 
 def search_books(books, query):
@@ -77,27 +81,21 @@ def search_books(books, query):
 def view_all_books(books):
     print("All Books:")
     for book in books:
-        print(
-            f"ID: {book.book_id}, Title: {book.title}, Author: {book.author}, Genre: {book.genre}, Status: {book.status}"
-        )
+        print(f"{book.book_id}. {book.title} by {book.author} ({book.status})")
 
 
 def view_available_books(books):
     print("Available Books:")
     for book in books:
         if book.status == "Available":
-            print(
-                f"ID: {book.book_id}, Title: {book.title}, Author: {book.author}, Genre: {book.genre}"
-            )
+            print(f"{book.book_id}. {book.title} by {book.author}")
 
 
 def view_checked_out_books(books):
     print("Checked-Out Books:")
     for book in books:
         if book.status == "Checked Out":
-            print(
-                f"ID: {book.book_id}, Title: {book.title}, Author: {book.author}, Genre: {book.genre}"
-            )
+            print(f"{book.book_id}. {book.title} by {book.author}")
 
 
 def main():
@@ -105,53 +103,48 @@ def main():
     users = []
 
     while True:
-        print("1. Add book")
-        print("2. Add user")
-        print("3. Borrow book")
-        print("4. Return book")
-        print("5. Search books")
-        print("6. View all books")
-        print("7. View available books")
-        print("8. View checked-out books")
-        print("9. Exit")
-        choice = int(input("Enter your choice: "))
+        print("Library Management System!")
+        print("----------------------------------------")
+        print("Please choose an option:")
+        print("1. View all books")
+        print("2. Search for a book")
+        print("3. Borrow a book")
+        print("4. Return a book")
+        print("5. View all users")
+        print("6. Exit")
+        choice = int(input("Enter your choice (1-6): "))
 
         if choice == 1:
-            book_id = int(input("Enter book ID: "))
-            title = input("Enter book title: ")
-            author = input("Enter book author: ")
-            genre = input("Enter book genre: ")
-            add_book(books, book_id, title, author, genre)
+            view_all_books(books)
         elif choice == 2:
-            user_id = int(input("Enter user ID: "))
-            name = input("Enter user name: ")
-            add_user(users, user_id, name)
-        elif choice == 3:
-            user_id = int(input("Enter your user ID: "))
-            book_id = int(input("Enter book ID: "))
-            borrow_book(books, users, user_id, book_id)
-        elif choice == 4:
-            user_id = int(input("Enter your user ID: "))
-            book_id = int(input("Enter book ID: "))
-            return_book(books, users, user_id, book_id)
-        elif choice == 5:
-            query = input("Enter search query: ")
+            query = input("Enter the book title or author: ")
             results = search_books(books, query)
             if results:
                 print("Search results:")
                 for book in results:
                     print(
-                        f"ID: {book.book_id}, Title: {book.title}, Author: {book.author}, Genre: {book.genre}, Status: {book.status}"
+                        f"{book.book_id}. {book.title} by {book.author} ({book.status})"
                     )
             else:
-                print("No books are found.")
+                print("No matching books found.")
+        elif choice == 3:
+            user_id = int(input("Enter your User ID: "))
+            book_id = int(input("Enter the Book ID you want to borrow: "))
+            if borrow_book(books, users, user_id, book_id):
+                print("You have successfully borrowed the book.")
+            else:
+                print("Sorry, the book is currently checked out.")
+        elif choice == 4:
+            user_id = int(input("Enter your User ID: "))
+            book_id = int(input("Enter the Book ID you want to return: "))
+            if return_book(books, users, user_id, book_id):
+                print("You have returned the book. Thanks")
+            else:
+                print("Book is not borrowed or user not found.")
+        elif choice == 5:
+            print("You Don't have admin Access.")
         elif choice == 6:
-            view_all_books(books)
-        elif choice == 7:
-            view_available_books(books)
-        elif choice == 8:
-            view_checked_out_books(books)
-        elif choice == 9:
+            print("Exiting the library system...")
             break
         else:
             print("Invalid choice. Please try again.")
