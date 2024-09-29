@@ -1,3 +1,15 @@
+import csv
+
+
+def export_books_to_csv(books, filename="library_data.csv"):
+    with open(filename, "w", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(["Title", "Author", "Genre", "Available"])
+        for book in books:
+            writer.writerow([book.title, book.author, book.genre, book.is_available])
+    print(f"Data exported to '{filename}'.")
+
+
 class Book:
     def __init__(self, title, author, genre):
         self.title = title
